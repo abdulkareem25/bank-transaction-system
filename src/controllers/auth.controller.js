@@ -42,3 +42,24 @@ export const signUp = async (req, res, next) => {
     }
   });
 };
+
+export const getUser = async (req, res, next) => {
+
+  const userId = req.user;
+  const user = await userModel.findById(userId);
+
+  if (!user) {
+    const error = new Error("User not found");
+    error.statusCode = 404;
+    return next(error);
+  }
+
+  res.status(200).json({
+    success: true,
+    user: {
+      id: user._id,
+      username: user.username,
+      email: user.email
+    }
+  });
+};
